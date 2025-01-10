@@ -8,7 +8,7 @@ const GetProfileRequest = async (username: string, token: string) : Promise<IPro
         return sales;
     } */
 
-    var urlencoded = new URLSearchParams();
+    const urlencoded = new URLSearchParams();
     urlencoded.append("username", username);
     urlencoded.append("token", token);
 

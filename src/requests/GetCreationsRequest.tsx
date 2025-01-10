@@ -42,7 +42,7 @@ const GetCreationsRequest = async (username: string, token: string) : Promise<IC
         return formattedCreations;
     }
 
-    var urlencoded = new URLSearchParams();
+    const urlencoded = new URLSearchParams();
     urlencoded.append("username", username);
     urlencoded.append("token", token);
 

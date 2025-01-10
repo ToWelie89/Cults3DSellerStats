@@ -1,8 +1,7 @@
-import { ReactNode } from "react";
 import styled from "styled-components";
 
 interface IInputTextProps {
-    onChange: (ev: any) => void;
+    onChange: React.ChangeEventHandler<HTMLInputElement>;
     type: string;
     placeholder: string;
 }

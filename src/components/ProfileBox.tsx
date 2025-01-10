@@ -119,7 +119,7 @@ export const ProfileBox = (props: IProfileBoxProps) => {
         }
     }, []);
 
-    const firstSale = props.sales.sort((a, b) => Number(moment(a.createdAt).format('x')) - Number(moment(b.createdAt).format('x')))[0];
+    //const firstSale = props.sales.sort((a, b) => Number(moment(a.createdAt).format('x')) - Number(moment(b.createdAt).format('x')))[0];
     const firstCreation = props.creations.sort((a, b) => Number(moment(a.publishedAt).format('x')) - Number(moment(b.publishedAt).format('x')))[0];
 
     return (

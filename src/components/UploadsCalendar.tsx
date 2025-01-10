@@ -181,7 +181,7 @@ interface IYearContainerProps {
     currency: string;
 }
 
-const dayIndexToDWeekday = (dayIndex: number) => {
+/* const dayIndexToDWeekday = (dayIndex: number) => {
     switch (dayIndex) {
         case 0:
             return 'Sunday';
@@ -198,7 +198,7 @@ const dayIndexToDWeekday = (dayIndex: number) => {
         case 6:
             return 'Saturday';
     }
-}
+} */
 
 const Day = (props: IDayProps) => {
     const date = moment(`${props.month}-${props.day}-${props.year}`);
@@ -324,12 +324,12 @@ const MonthContainer = (props: IMonthProps) => {
             </h4>
             <MonthInnerContainer>
                 {
-                    new Array(amountOfFillerDays).fill(undefined).map((x, i) => (
+                    new Array(amountOfFillerDays).fill(undefined).map((_x, i) => (
                         <Day key={'fillerday-' + i} isFiller={true} />
                     ))
                 }
                 {
-                    new Array(daysThisMonth).fill(undefined).map((x, i) => (
+                    new Array(daysThisMonth).fill(undefined).map((_x, i) => (
                         <Day key={'day-' + i} month={props.month} year={props.year} day={i + 1} creations={creationsThisMonth} anniversaries={props.anniversaries} currency={props.currency} />
                     ))
                 }
@@ -359,7 +359,7 @@ const YearContainer = (props: IYearContainerProps) => {
             </h2>
             <MonthsContainer className={className}>
                 {
-                    new Array(monthsToShow).fill(undefined).map((x, i) => (
+                    new Array(monthsToShow).fill(undefined).map((_x, i) => (
                         <MonthContainer key={'month-' + i} month={Number(startingMonthIndex) + i} creations={creationsThisYear} year={props.year} anniversaries={props.anniversaries} currency={props.currency} />
                     ))
                 }
@@ -369,7 +369,8 @@ const YearContainer = (props: IYearContainerProps) => {
 }
 
 export const UploadsCalendar = (props: IUploadsCalendarProps) => {
-    const [currency, setCurrency] = useState<string>(props.sales ? props.sales[0].income.currency : '');
+    const currency = props.sales ? props.sales[0].income.currency : '';
+
     const [years, setYears] = useState<any | null>(null);
     const [anniversaries, setAnniversaries] = useState<any | null>(null);
 
@@ -381,13 +382,13 @@ export const UploadsCalendar = (props: IUploadsCalendarProps) => {
         if (!loaded) {
             loaded = true;
 
-            let startDate = moment(props.creations.sort((a, b) => a.createdTimestamp - b.createdTimestamp)[0].createdTimestamp).subtract(10, 'days');
+            const startDate = moment(props.creations.sort((a, b) => a.createdTimestamp - b.createdTimestamp)[0].createdTimestamp).subtract(10, 'days');
 
             const years = new Array(
                 Math.abs(
                     startDate.diff(moment(), 'years')
                 ) + 1
-            ).fill(null).map((x, i) => x = Number(startDate.format('YYYY')) + i)
+            ).fill(null).map((_x, i) => _x = Number(startDate.format('YYYY')) + i)
 
             setYears(years);
 
@@ -402,7 +403,7 @@ export const UploadsCalendar = (props: IUploadsCalendarProps) => {
                     1250, 1500, 1750, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 6000, 7000,
                     8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 20000, 25000, 30000, 40000, 50000
                 ].forEach(x => {
-                    let item = e.data.profitOverTime.find((d: any) => d.moneyMadeSoFar >= x);
+                    const item = e.data.profitOverTime.find((d: any) => d.moneyMadeSoFar >= x);
                     if (item) {
                         res.push({
                             levelReach: x,

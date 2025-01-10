@@ -133,7 +133,7 @@ const CreationsTable = (props: IInputCheckboxProps) => {
         setCreations([...creationsCopy]);
     }, [desc, currentSorting]);
 
-    const clickRowHeader = (key: string) => {
+    const clickRowHeader = (key: SortTypes) => {
         if (currentSorting === key) {
             setDesc(!desc)
         } else {

@@ -12,9 +12,9 @@ self.onmessage = function (e) {
 
         const firstSale = sales[0];
         const startDate = moment(firstSale.createdAt);
-        let currentDate = startDate.clone();
+        const currentDate = startDate.clone();
 
-        let res = [];
+        const res = [];
         console.log('start getting total profit over time')
 
         while (currentDate.format('DD-MM-YYYY') !== moment().add(1, 'days').format('DD-MM-YYYY')) { // Loop until today

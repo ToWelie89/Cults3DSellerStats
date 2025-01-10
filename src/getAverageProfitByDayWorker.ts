@@ -11,7 +11,7 @@ self.onmessage = function (e) {
     
         const dailySales = [];
     
-        let currentDate = startDate.clone();
+        const currentDate = startDate.clone();
         while (currentDate.format('DD-MM-YYYY') !== moment().add(1, 'days').format('DD-MM-YYYY')) {
             const salesThisDay = sales.filter(x => moment(x.createdAt).format('DD-MM-YYYY') === currentDate.format('DD-MM-YYYY'));
     

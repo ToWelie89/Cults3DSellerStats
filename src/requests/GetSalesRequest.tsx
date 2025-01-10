@@ -8,7 +8,7 @@ const GetSalesRequest = async (username: string, token: string) : Promise<ISale[
         return sales;
     }
 
-    var urlencoded = new URLSearchParams();
+    const urlencoded = new URLSearchParams();
     urlencoded.append("username", username);
     urlencoded.append("token", token);
 
