@@ -4,7 +4,7 @@ import Start from './pages/Start'
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/cults">
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Start />} />
