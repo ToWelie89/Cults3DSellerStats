@@ -51,9 +51,10 @@ const GetCreationsRequest = async (username: string, token: string) : Promise<IC
 
     const protocol = window.location.protocol;
     const hostname = window.location.hostname;
-    const port = 4000;
+//    const port = 4000;
 
-    const url = `${protocol}//${hostname}:${port}/getdata`
+    const url = `${protocol}//${hostname}/api/getdata`
+//	const url = "http://sti-starcraft.org:4000/getdata";
 
     const res = await fetch(url, {
         method: 'POST',

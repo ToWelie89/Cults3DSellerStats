@@ -17,9 +17,9 @@ const GetProfileRequest = async (username: string, token: string) : Promise<IPro
 
     const protocol = window.location.protocol;
     const hostname = window.location.hostname;
-    const port = 4000;
+//    const port = 4000;
 
-    const url = `${protocol}//${hostname}:${port}/getprofile`
+    const url = `${protocol}//${hostname}/api/getprofile`
 
     const res = await fetch(url, {
         method: 'POST',

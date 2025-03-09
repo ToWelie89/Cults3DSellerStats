@@ -17,9 +17,9 @@ const GetSalesRequest = async (username: string, token: string) : Promise<ISale[
 
     const protocol = window.location.protocol;
     const hostname = window.location.hostname;
-    const port = 4000;
+//    const port = 4000;
 
-    const url = `${protocol}//${hostname}:${port}/getsales`
+    const url = `${protocol}//${hostname}/api/getsales`
 
     const res = await fetch(url, {
         method: 'POST',
