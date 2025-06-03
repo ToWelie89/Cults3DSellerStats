@@ -124,18 +124,31 @@ function shuffleArray(array: any[]) {
 }
 
 const generateInitialSeries = (
+  sales: ISale[] | null,
   creations: ICreationExtended[],
   colors: any[]
 ) => {
   const series: any[] = [];
 
-  const colorStep = Math.floor(150 / creations.length);
+  if (!sales || sales.length === 0) {
+    return series;
+  }
 
-  creations.forEach((c, index) => {
+  const uniqueCreations: string[] = [
+    ...new Set(sales.map((sale: ISale) => sale.creation.name)),
+  ];
+
+  const colorStep = Math.floor(150 / uniqueCreations.length);
+
+  uniqueCreations.forEach((c, index) => {
+    const creation = creations.find(
+      (creation: ICreationExtended) => creation.name === c
+    );
+
     series.push({
       data: [],
-      label: c.name,
-      id: c.id,
+      label: c,
+      id: creation ? creation.id : index,
       stack: "total",
       color: colors[index * colorStep],
     });
@@ -144,7 +157,7 @@ const generateInitialSeries = (
 };
 
 const POSSIBLE_INTERVAL_LENGHTS_FOR_DAILY_CHART = [
-  10, 15, 20, 25, 30, 35, 40, 45, 50,
+  10, 15, 20, 25, 30, 35, 40, 45, 50, 65, 80, 100
 ];
 
 const SalesCharts = (props: ISalesChartsProps) => {
@@ -276,8 +289,17 @@ const SalesCharts = (props: ISalesChartsProps) => {
 
     const incomeThisYear = data.reduce((t, c) => (t += c), 0);
     setTotalIncomeFromThisYear(incomeThisYear);
-    const avgPerMonthThisYear = totalIncomeFromThisYear / 12;
-    setAveragePerMonthThisYear(avgPerMonthThisYear);
+
+    if (currentYearToShow.format("YYYY") === moment().format("YYYY")) {
+      const total = data
+        .slice(0, Number(moment().format("MM")) - 1)
+        .reduce((t, c) => (t += c), 0);
+      const avgPerMonthThisYear = total / (Number(moment().format("MM")) - 1);
+      setAveragePerMonthThisYear(avgPerMonthThisYear);
+    } else {
+      const avgPerMonthThisYear = totalIncomeFromThisYear / 12;
+      setAveragePerMonthThisYear(avgPerMonthThisYear);
+    }
 
     setMonthlyChartData([
       {
@@ -299,7 +321,11 @@ const SalesCharts = (props: ISalesChartsProps) => {
     shuffleArray(colors);
 
     const currentDate = dailyStartDate.clone();
-    let generatedSeries = generateInitialSeries(props.creations, colors);
+    let generatedSeries = generateInitialSeries(
+      props.sales,
+      props.creations,
+      colors
+    );
     const xAxisLabels = [];
 
     const incomeForThisInterval = [];
@@ -352,6 +378,8 @@ const SalesCharts = (props: ISalesChartsProps) => {
     generatedSeries = generatedSeries.filter(
       (s) => !s.data.every((x: number) => x === 0)
     );
+
+    console.log("generatedSeries", generatedSeries);
 
     setDailySeries(generatedSeries);
     setDailyXLabels(xAxisLabels);
@@ -436,7 +464,35 @@ const SalesCharts = (props: ISalesChartsProps) => {
       loadDataForDailyChart();
       loadDataForMonthlyChart();
 
-      const profitPerItemData = props.creations
+      const salesGroupedByCreation = props.sales
+        ? props.sales.reduce((acc: any, sale: ISale) => {
+            if (!acc[sale.creation.name]) {
+              acc[sale.creation.name] = {
+                label: sale.creation.name,
+                totalSalesAmount: 0,
+              };
+            }
+            acc[sale.creation.name].totalSalesAmount += sale.income.cents;
+            return acc;
+          }, {})
+        : {};
+
+      const profitPerItemData = Object.values(salesGroupedByCreation)
+        .map((item: any, index: number) => {
+          const itemExists = props.creations.find((c) => c.name === item.label);
+
+          return {
+            label: `${item.label}${
+              !itemExists ? ` - (Item no longer exists)` : ""
+            }`,
+            value: item.totalSalesAmount / 100,
+            id: index,
+          };
+        })
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 100);
+
+      /* const profitPerItemData = props.creations
         .filter((x) => x.totalSalesAmountAfterCut.cents > 0)
         .sort(
           (a, b) =>
@@ -447,7 +503,7 @@ const SalesCharts = (props: ISalesChartsProps) => {
           id: index,
           value: c.totalSalesAmountAfterCut.cents / 100,
           label: c.name,
-        }));
+        })); */
 
       const totalProfit = props.sales
         ? props.sales.reduce((t, c) => (t += c.income.cents / 100), 0)

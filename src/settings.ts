@@ -1,3 +1,4 @@
 export const settings = {
-    useMocks: false
+    useMocks: false,
+    prod: false
 };
